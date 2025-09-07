@@ -1,0 +1,39 @@
+<div class="vehicle-list">
+  <h2>Fahrzeuge</h2>
+
+  <!-- Formular zum Hinzufügen -->
+  <div class="form">
+    <input [(ngModel)]="newVehicle.brand" placeholder="Marke" />
+    <input [(ngModel)]="newVehicle.model" placeholder="Modell" />
+    <input [(ngModel)]="newVehicle.year" type="number" />
+    <button (click)="onAddVehicle()">➕ Hinzufügen</button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">⏳ Lade Fahrzeuge...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <div class="vehicle-cards" *ngIf="!isLoading && vehicles.length > 0">
+    <div *ngFor="let v of vehicles" class="vehicle-card">
+      <h3>{{ v.brand }} {{ v.model }} ({{ v.year }})</h3>
+
+      <div class="vehicle-actions">
+        <button (click)="toggleShowImages(v.id)">📷 Show Images</button>
+
+        <label class="upload-btn">
+          ⬆️ Add Image
+          <input type="file" accept="image/*" (change)="onFileSelected($event, v.id)" hidden />
+        </label>
+        <button (click)="onUpload(v.id)">Upload</button>
+      </div>
+
+      <!-- Galerie -->
+      <div *ngIf="shownImages[v.id]" class="image-gallery">
+        <img *ngFor="let img of shownImages[v.id]" [src]="img" alt="Vehicle Image"/>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && vehicles.length === 0" class="no-vehicles">
+    Keine Fahrzeuge vorhanden.
+  </div>
+</div>
